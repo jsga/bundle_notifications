@@ -1,0 +1,6 @@
+.venv*
+.vscode/*
+bundle_notifications.egg-info
+dist/
+.eggs/
+notebooks/.ipynb_checkpoints

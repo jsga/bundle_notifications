@@ -83,3 +83,13 @@ dist: clean ## builds source and wheel package
 
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
+
+new_env: ## Create new virtual env
+	python -m venv .venv_bundle_notifications
+
+activate: ## Activate virtual env (not working FIXME)
+	@bash -c "source .venv_bundle_notifications/bin/activate"
+
+requirements: ## Install requirements and current package
+	python -m pip install -U pip setuptools wheel
+	python -m pip install -r requirements_dev.txt
