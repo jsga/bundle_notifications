@@ -1,7 +1,7 @@
 .. highlight:: shell
 
 ====================
-bundle_notifications
+A simple tool to bundle notification
 ====================
 
 
@@ -12,8 +12,14 @@ bundle_notifications
         :target: https://bundle-notifications.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
+.. image:: https://img.shields.io/codecov/c/gh/jsga/bundle_notifications
+		:target: https://img.shields.io/codecov/c/gh/jsga/bundle_notifications
+		:alt: codecov.io
 
-Features
+
+`Read the docs`_ here
+
+About
 ---------
 
 This package contains a tool for bundling notifications in event streams. The goal is to minimize the number of notifications sent to users.
@@ -35,7 +41,7 @@ As an example, here it is the first couple of rows for a sample user_id::
 	2017-09-26 13:02:32  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara
 	===================  ==============================  ==============================  =============
 
-Using bundle_notifications tool, we get the following DataFrame with 3 new columns:
+Using bundle_notifications tool, we can easily compute the following DataFrame with 3 new columns:
 
 1. **tours**: number of friends that have gone on a tour since the beginning of the stream of data
 2. **timestamp_first_tour**: timestamp for the first tour amongst his/her friends
@@ -67,27 +73,45 @@ Quickstart
 -----------------
 
 
-1. Clone the repository from Github::
+1. Option 1: using pip to directly install the package to a virtual enviroment::
+
+	# Create a virtual enviroment
+	$ python -m venv .venv_bundle_notifications
+
+	# Activate it
+	$ source .venv_bundle_notifications/bin/activate
+
+	# Install using pip + git
+	$ pip install git+https://github.com/jsga/bundle_notifications.git
+
+2. Option 2: clone the repository from Github::
 
     $ git clone https://github.com/jsga/bundle_notifications.git
 
-Alternatively, you can manually download the repository as a zip file.
+ Alternatively, you can manually download the repository as a zip file.
 
-2. Make sute the terminal is at the root of the package::
+ Make sure the terminal is at the root of the package::
 
     $ cd bundle_notifications
     $ pwd
 	>/Users/myuser/Documents/GitHub/bundle_notifications
 
-You should see something like the above
+ You should see something like the above
 
-3. Install the package::
+ In case you want to install this package in a virtual enviroment, create one and activate it::
+
+	$ python -m venv .venv_bundle_notifications
+	$ source .venv_bundle_notifications/bin/activate 
+
+ Install the package::
 
     $ python setup.py install
 
-4. You should be reasy to start bundling your first notifications! Using an example dataset_, printing only 20 rows::
+3. **Ready!** Bundle your first notifications! Using an example dataset_, printing only 20 rows::
 
     $ bundle_notifications -p "https://static-eu-komoot.s3.amazonaws.com/backend/challenge/notifications.csv" -n 10
+ 
+ It takes about a minute. The output is as follows:
 
 ::
 
@@ -111,22 +135,18 @@ You should see something like the above
 Features: current and future
 --------------------------------
 
-The tool is mainly pandas. It relies on two main functionalities: reading csv files and group-apply function. With a 30 MB dataset it takes around 1 minute to compute the groupping and writting down the messages. 
+The tool is mainly based on pandas. It relies on two main functionalities: reading csv files and group-apply function. With a 30 MB dataset it takes around 1 minute to compute the groupping and applying a function to each user_id. 
 
-The advantage of using pandas over custom-made tools is its simplicity. Also, it is super easy to parallelize such functions. Since the groupping are done by user_id it would be straight forward to parallelize the comptutations with existing tools like Modin_ or, if we are dealing with large datasets, with Dask_.
+The advantage of using pandas over custom-made tools is its simplicity. Also, vectorizing the calculations makes them quite fast.
 
 Here there are some possible future improvements:
 
-1. Implement checks. What if some ID's are empty?
+1. Implement speed enhacements translating the apply function *bundle_func()* to Numba_. This could speed up by asignificantly the computations.
 2. Encapsulating this tool in a Docker image would make it much easier to move from development to a productions server.
-3. Parallelize the computation, using Modin_ or Dask_. If the docker image is in place we could scale this up to many threads quite easily
-4. Option to read the data directly from a database, so that this tool can be run periodically without human supervision
+3. Option to read the data directly from a database, so that this tool can be run periodically without human supervision
+4. If data grows, parallelize the computation using Dask_, for example. If the docker image is in place we could scale this up to many threads quite easily.
 
-
-* Documentation: https://bundle-notifications.readthedocs.io.
-
-
-
+.. _`Read the docs`: https://bundle-notifications.readthedocs.io
 .. _dataset: https://static-eu-komoot.s3.amazonaws.com/backend/challenge/notifications.csv
-.. _modin: https://github.com/modin-project/modin
 .. _Dask: https://dask.org/
+.. _Numba: https://pandas.pydata.org/pandas-docs/stable/user_guide/enhancingperf.html#using-numba
