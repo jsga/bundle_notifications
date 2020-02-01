@@ -89,8 +89,10 @@ def test_bundle_func():
 def test_add_message():
     """Test for the message of the notification"""
 
-    x = pd.DataFrame({'message':['Javi','Javier', 'Saez'], 'tours':[1,2,3]})
+    x = pd.DataFrame({'message':['Javi','Javier', 'Saez','Gallego'], 'tours':[1,2,3,-1]})
 
     assert bundle_notifications.add_message(x.iloc[0,]) == 'Javi went on a tour'
     assert bundle_notifications.add_message(x.iloc[1,]) == 'Javier and 1 other went on a tour'
     assert bundle_notifications.add_message(x.iloc[2,]) == 'Saez and 2 others went on a tour'
+    with pytest.raises(ValueError):
+        bundle_notifications.add_message(x.iloc[3,])

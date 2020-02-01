@@ -6,4 +6,8 @@ install:
   - pip install -r requirements_dev.txt
   - pip install .
 # command to run tests
-script: make test
+script: 
+  - make test
+  - py.test  --cov-report=xml --cov=bundle_notifications --cov=tests/
+after_success:
+  - codecov

@@ -1,3 +1,5 @@
+.. highlight:: shell
+
 ====================
 bundle_notifications
 ====================
@@ -11,28 +13,27 @@ bundle_notifications
         :alt: Documentation Status
 
 
-
 Features
 ---------
 
 This package contains a tool for bundling notifications in event streams. The goal is to minimize the number of notifications sent to users.
 
-As an example, here it is the first couple of rows for a sample user_id:
+As an example, here it is the first couple of rows for a sample user_id::
 
-===================  ==============================  ==============================  =============
-timestamp            user_id                         friend_id                       friend_name
-===================  ==============================  ==============================  =============
-2017-08-08 11:04:36  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor
-2017-08-10 12:29:47  0005BDD51B0185DCF1A4932CEB8437  266C5C5239255DF65ECFFDCEAF7048  Iustinian
-2017-08-11 11:53:12  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor
-2017-08-12 23:42:11  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara
-2017-08-24 14:49:06  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor
-2017-08-31 14:30:48  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara
-2017-09-01 13:21:59  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie
-2017-09-01 13:29:40  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie
-2017-09-01 17:13:37  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie
-2017-09-26 13:02:32  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara
-===================  ==============================  ==============================  =============
+	===================  ==============================  ==============================  =============
+	timestamp            user_id                         friend_id                       friend_name
+	===================  ==============================  ==============================  =============
+	2017-08-08 11:04:36  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor
+	2017-08-10 12:29:47  0005BDD51B0185DCF1A4932CEB8437  266C5C5239255DF65ECFFDCEAF7048  Iustinian
+	2017-08-11 11:53:12  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor
+	2017-08-12 23:42:11  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara
+	2017-08-24 14:49:06  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor
+	2017-08-31 14:30:48  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara
+	2017-09-01 13:21:59  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie
+	2017-09-01 13:29:40  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie
+	2017-09-01 17:13:37  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie
+	2017-09-26 13:02:32  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara
+	===================  ==============================  ==============================  =============
 
 Using bundle_notifications tool, we get the following DataFrame with 3 new columns:
 
@@ -40,22 +41,22 @@ Using bundle_notifications tool, we get the following DataFrame with 3 new colum
 2. **timestamp_first_tour**: timestamp for the first tour amongst his/her friends
 3. **message**: notification message
 
-Here it is the outcome:
+Here it is the outcome::
 
-===================  ==============================  ==============================  =============  =======  ======================  =====================================
-timestamp            user_id                         friend_id                       friend_name      tours  timestamp_first_tour    message
-===================  ==============================  ==============================  =============  =======  ======================  =====================================
-2017-08-08 11:04:36  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor            1  2017-08-08 11:04:36     Rameshwor went on a tour
-2017-08-10 12:29:47  0005BDD51B0185DCF1A4932CEB8437  266C5C5239255DF65ECFFDCEAF7048  Iustinian            2  2017-08-08 11:04:36     Rameshwor and 1 other went on a tour
-2017-08-11 11:53:12  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor            2  2017-08-08 11:04:36     Rameshwor and 1 other went on a tour
-2017-08-12 23:42:11  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara                 3  2017-08-08 11:04:36     Rameshwor and 2 others went on a tour
-2017-08-24 14:49:06  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor            3  2017-08-08 11:04:36     Rameshwor and 2 others went on a tour
-2017-08-31 14:30:48  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara                 3  2017-08-08 11:04:36     Rameshwor and 2 others went on a tour
-2017-09-01 13:21:59  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie                4  2017-08-08 11:04:36     Rameshwor and 3 others went on a tour
-2017-09-01 13:29:40  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie                4  2017-08-08 11:04:36     Rameshwor and 3 others went on a tour
-2017-09-01 17:13:37  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie                4  2017-08-08 11:04:36     Rameshwor and 3 others went on a tour
-2017-09-26 13:02:32  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara                 4  2017-08-08 11:04:36     Rameshwor and 3 others went on a tour
-===================  ==============================  ==============================  =============  =======  ======================  =====================================
+	===================  ==============================  ==============================  =============  =======  ======================  =====================================
+	timestamp            user_id                         friend_id                       friend_name      tours  timestamp_first_tour    message
+	===================  ==============================  ==============================  =============  =======  ======================  =====================================
+	2017-08-08 11:04:36  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor            1  2017-08-08 11:04:36     Rameshwor went on a tour
+	2017-08-10 12:29:47  0005BDD51B0185DCF1A4932CEB8437  266C5C5239255DF65ECFFDCEAF7048  Iustinian            2  2017-08-08 11:04:36     Rameshwor and 1 other went on a tour
+	2017-08-11 11:53:12  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor            2  2017-08-08 11:04:36     Rameshwor and 1 other went on a tour
+	2017-08-12 23:42:11  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara                 3  2017-08-08 11:04:36     Rameshwor and 2 others went on a tour
+	2017-08-24 14:49:06  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor            3  2017-08-08 11:04:36     Rameshwor and 2 others went on a tour
+	2017-08-31 14:30:48  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara                 3  2017-08-08 11:04:36     Rameshwor and 2 others went on a tour
+	2017-09-01 13:21:59  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie                4  2017-08-08 11:04:36     Rameshwor and 3 others went on a tour
+	2017-09-01 13:29:40  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie                4  2017-08-08 11:04:36     Rameshwor and 3 others went on a tour
+	2017-09-01 17:13:37  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie                4  2017-08-08 11:04:36     Rameshwor and 3 others went on a tour
+	2017-09-26 13:02:32  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara                 4  2017-08-08 11:04:36     Rameshwor and 3 others went on a tour
+	===================  ==============================  ==============================  =============  =======  ======================  =====================================
 
 Note that Julie went on 3 tours in a row. The tool takes this into account this, so that Julie's friend receive a single notification that Julie went on a tour.
 

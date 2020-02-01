@@ -9,6 +9,7 @@ bump2version==0.5.11
 certifi==2019.11.28
 chardet==3.0.4
 Click==7.0
+codecov==2.0.15
 coverage==4.5.4
 docutils==0.16
 entrypoints==0.3
@@ -32,6 +33,7 @@ pyflakes==2.1.1
 Pygments==2.5.2
 pyparsing==2.4.6
 pytest==4.6.5
+pytest-cov==2.8.1
 pytest-runner==5.1
 python-dateutil==2.8.1
 pytz==2019.3
