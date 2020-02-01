@@ -1,16 +1,17 @@
 Welcome to bundle_notifications's documentation!
-======================================
+=================================================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    readme
-   installation
-   usage
    modules
    contributing
    history
+
+.. include:: ../README.rst
+
 
 Indices and tables
 ==================

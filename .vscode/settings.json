@@ -1,3 +1,5 @@
 {
-    "python.pythonPath": "/Users/jsg/Documents/GitHub/bundle_notifications_ds/.venv_bundle_notifications/bin/python3"
+    "python.pythonPath": "/Users/jsg/Documents/GitHub/bundle_notifications_ds/.venv_bundle_notifications/bin/python3",
+    "python.formatting.provider": "black",
+    "git.ignoreLimitWarning": true
 }

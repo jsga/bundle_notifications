@@ -58,11 +58,11 @@ def test_bundle_func():
     """Test for bundling function"""
 
     # Create fake data
-    d_fake = {'timestamp': {0: Timestamp('2017-08-01 00:06:47'),
-  1: Timestamp('2017-08-01 00:31:05'),
-  2: Timestamp('2017-08-01 00:35:24'),
-  3: Timestamp('2017-08-01 01:20:47'),
-  4: Timestamp('2017-08-01 01:21:39')},
+    d_fake = {'timestamp': {0: pd.Timestamp('2017-08-01 00:06:47'),
+  1: pd.Timestamp('2017-08-01 00:31:05'),
+  2: pd.Timestamp('2017-08-01 00:35:24'),
+  3: pd.Timestamp('2017-08-01 01:20:47'),
+  4: pd.Timestamp('2017-08-01 01:21:39')},
  'user_id': {0: 'F62712701E7AF6588B69A44235A6FC',
   1: 'DF5BB50FAD220C8D2A8FF9A0DBAA47',
   2: '8473CCCE79294CB494D1B42E2B1BAA',

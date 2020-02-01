@@ -1,11 +1,12 @@
 """Console script for bundle_notifications package."""
 import sys
 import click
+import tabulate
 from .bundle_notifications import load_data, bundle_func
 
 @click.command()
-@click.option('--path_csv', '-p',default="https://static-eu-komoot.s3.amazonaws.com/backend/challenge/notifications.csv",type=click.STRING, help='Path to csv file.',show_default=True)
-@click.option('--nrows_print','-n', default=50, type=click.INT, help='Number of rows to print to stout',show_default=True)
+@click.option('-p','--path_csv' ,default="https://static-eu-komoot.s3.amazonaws.com/backend/challenge/notifications.csv",type=click.STRING, help='Path to csv file.',show_default=True)
+@click.option('-n','--nrows_print', default=50, type=click.IntRange(min=0), help='Number of rows to print to stout',show_default=True)
 def main(path_csv, nrows_print):
     """Download data, bundles notifications and prints solution to stdout
     """
@@ -23,11 +24,11 @@ def main(path_csv, nrows_print):
 
     # Print to stout
     click.echo(click.style('Great! Here there are the bundled notifications', fg='green'))
-    click.echo(df.head(nrows_print))
+    click.echo(tabulate.tabulate(df.head(nrows_print), df.columns ,showindex=False))
 
     return 0
 
 
 if __name__ == "__main__":
-    #sys.exit(main())  # pragma: no cover
-    main()
+    sys.exit(main())  # pragma: no cover
+

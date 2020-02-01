@@ -16,9 +16,8 @@ def load_data(path_csv = "https://static-eu-komoot.s3.amazonaws.com/backend/chal
     Returns
     -------
     pd.DataFrame
-        DataFrame containing the stream of data. It has 4 columns: 
-            'timestamp','user_id','friend_id','friend_name'
-        The column named 'timestamp' is returned as a datetime64[ns] type.
+        DataFrame containing the stream of data. It has 4 columns:  'timestamp','user_id','friend_id','friend_name'
+        The column named 'timestamp' is cast as a datetime64[ns] type.
 
     """
 
@@ -63,12 +62,12 @@ def bundle_func(df_g):
     Parameters
     ----------
     df_g : pd.DataFrame
-        DataFrame containing 4 columns: 'timestamp','user_id','friend_id','friend_name'
+        DataFrame containing 3 columns: 'timestamp_first_tour','tours','message'
 
     Returns
     -------
     pd.DataFrame
-        Contains 3 extra columns
+        Contains 3 extra columns as explained above
 
     """
     

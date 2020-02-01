@@ -1,10 +1,25 @@
+# My vscode config
+.vscode/
+
+# Virtual env
 .venv*
-.vscode/*
+
+# Distribution / packaging
+*__pycache__
 bundle_notifications.egg-info
 dist/
 .eggs/
-notebooks/.ipynb_checkpoints
 build/
+
+# Test reports
+htmlcov/
+.coverage
+.tox/
+.pytest*
+
+# Sphinx documentation
 docs/_build/
-*__pycache__
-.vscode/settings.json
+
+# For now, do not keep the notebooks nor the data
+notebooks/*
+data/*
