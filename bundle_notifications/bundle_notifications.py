@@ -2,13 +2,16 @@
 import pandas as pd
 
 
-def load_data(path_csv = "https://static-eu-komoot.s3.amazonaws.com/backend/challenge/notifications.csv"):
+def load_data(path_csv = "https://static-eu-komoot.s3.amazonaws.com/backend/challenge/notifications.csv", nrows=None):
     """Loads the notification csv file
 
     Parameters
     ----------
-    path_csv : str
-        path to the csv file containing the data. It should have 4 comma-separated columns
+    path_csv : str, optional
+        Path to the csv file containing the data. It should have 4 comma-separated columns
+    
+    nrows : int, optional
+        Number of rows of file to read. Useful for reading pieces of large files or for testing this function.
 
     Returns
     -------
@@ -20,7 +23,7 @@ def load_data(path_csv = "https://static-eu-komoot.s3.amazonaws.com/backend/chal
     """
 
     df = pd.read_csv(path_csv, sep=",", header=None, names=['timestamp','user_id','friend_id','friend_name'],
-    parse_dates = ['timestamp'])
+    parse_dates = ['timestamp'], nrows=nrows)
 
     return df
 
@@ -42,16 +45,20 @@ def add_message(x):
 
     """
 
-    if x.tours <= 1:
+    if x.tours == 1:
         return f"{x.message} went on a tour"
+    elif x.tours == 2:
+        return f"{x.message} and {x.tours-1} other went on a tour"
+    elif x.tours >= 3:
+        return f"{x.message} and {x.tours-1} others went on a tour"
     else:
-        return f"{x.message} and {x.tours} others went on a tour"
+        raise ValueError(f'NUmber of tours not recognized. {x}')
 
-       
+
 def bundle_func(df_g):
     """Bundles notifications for a user_id
 
-    This function is meant to be used after a groupping (or filtering) of user_ids. It creates three new columns: 'timestamp_first_tour', 'tours' and 'message'
+    This function is meant to be used after a pandas groupping (or manual filtering) of user_ids. It creates three new columns: 'timestamp_first_tour', 'tours' and 'message'
 
     Parameters
     ----------
@@ -62,7 +69,6 @@ def bundle_func(df_g):
     -------
     pd.DataFrame
         Contains 3 extra columns
-
 
     """
     
@@ -78,8 +84,3 @@ def bundle_func(df_g):
     df_g['message'] = df_g.apply(add_message, axis=1)
     
     return df_g
-
-
-# # Sorting by time is important. Seems like it is, however, the devil is in the details...
-# df.sort_values('timestamp', inplace=True)
-# df_solution = df.groupby('user_id').apply(bundle_func)#.droplevel(0)

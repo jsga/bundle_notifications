@@ -4,3 +4,7 @@ bundle_notifications.egg-info
 dist/
 .eggs/
 notebooks/.ipynb_checkpoints
+build/
+docs/_build/
+*__pycache__
+.vscode/settings.json
