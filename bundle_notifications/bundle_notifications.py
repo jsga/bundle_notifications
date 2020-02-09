@@ -10,7 +10,7 @@ def load_data(path_csv, nrows=None):
 
     Parameters
     ----------
-    path_csv : str, optional
+    path_csv : str
         Path or url to the csv file containing the data. It should have 4
         comma-separated columns without header.
 
@@ -184,8 +184,8 @@ def count_tours_per_notif(notification_counter, friend_id, friend_name,
         Count of the number of tours done since the last notification was sent,
         for unique friends-id
     name_first : np.array of <U256
-        Names of the friend who first did a tour since the last notification was
-        sent.
+        Names of the friend who first did a tour since the last notification
+        was sent.
         len(name_first) <=4
     timestamp_first_tour : np.array of datetime64[ns]
         Timestamp of the first tour done by a friend, since the last

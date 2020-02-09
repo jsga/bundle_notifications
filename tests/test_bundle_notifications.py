@@ -30,7 +30,10 @@ def test_load_data():
     """Test for loading data function"""
 
     # Donwload a single dataframe
-    df = bundle_notifications.load_data(nrows=1)
+    path_csv = "https://static-eu-komoot.s3.amazonaws.com/backend/" \
+        "challenge/notifications.csv"
+    df = bundle_notifications.load_data(path_csv=path_csv, nrows=1)
+
     print(df.shape)
 
     assert isinstance(
