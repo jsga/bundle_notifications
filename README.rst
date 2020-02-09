@@ -1,7 +1,7 @@
 .. highlight:: shell
 
 =====================================
-A simple tool to bundle notification
+A simple tool to bundle notifications
 =====================================
 
 
@@ -45,9 +45,9 @@ As an example, here it is the first couple of rows for a sample user_id::
     2017-08-01 07:51:01  CFFEC5978B0A4A05FA6DCEFB2C82CC  268045C1DDB279D56F9873FCC5D2AA  Marcu
     2017-08-01 08:38:00  CFFEC5978B0A4A05FA6DCEFB2C82CC  57AA5706AD9E5D051463DCEA8FD9BF  Blanduzia
 
-Using bundle_notifications tool, we can easily compute the following DataFrame with 3 new columns:
+Using bundle_notifications tool, we can easily compute a solution table with the following columns:
 
-1. **notification_sent**: timestamp of the time when the notification should have been sent
+1. **notification_sent**: timestamp of the timestamp when the notification should have been sent
 2. **timestamp_first_tour**: timestamp for the first tour amongst his/her friends
 3. **tours**: number of friends that have gone on a tour since the last notification was sent
 4. **receiver_id**: id of the receiver
@@ -112,7 +112,7 @@ Install the package::
 
     $ bundle_notifications -p "https://static-eu-komoot.s3.amazonaws.com/backend/challenge/notifications.csv" -n 10
  
- It takes about a minute. The output is as follows:
+ It takes about 5 or 6 minutes. The output is as follows:
 
 ::
 
@@ -144,11 +144,9 @@ There are two goals:
 1. To not send more than 4 notifications a day to a user (should happen only a few times)
 2. To keep sending delay minimal
 
-These goals can be translated into an optimization problem, where the decision variable is
+These goals can be translated into an optimization problem, where the decision variable is **x** =  [x1, x2, x3, x4] representing indexes, each one corresponding to the timestamp when the notification should have been sent. The function to minimize is, therefore, the total delay incurred by sending the notifications at **x**.
 
-**x** =  [x1, x2, x3, x4] representing indexes, each one corresponding to the timestamp when the notification should have been sent. The function to minimize is, therefore, the total delay incurred by sending the notifications at **x**.
-
-Let's formulate an example. Say there are 10 events with timestamps **t** = [t0, t2, .., t10] and that we decide to send notification at **x** = [0, 2, 7, 10]. The total delay **D** is then calculated as::
+Let's formulate an example. Say there are 11 events with timestamps **t** = [t0, t2, .., t10] and that we decide to send notification at indexes **x** = [0, 2, 7, 10]. The total delay **D** is then calculated as::
 
     D = (t2-t1) + (t7-t6) + (t7-t4) + (t7-t3) + (t7-t6) + (t10-t8) + (t10-t9)
 
@@ -177,6 +175,8 @@ First, we group the users by *user_id* and *day*. For each of those groups, do:
 
         1. Count how many unique friends are active in between two notifications
 
+		2. Discard rows that do not correspond to **x**
+
 3. Create a custom message
 
 4. Gather relevant columns and delete intermediate ones
@@ -189,11 +189,13 @@ Features: Current and future
 
 The tool relies on two main pandas functionalities: reading CSV files and group-apply functions. Applying a custom function to a pandas groupby element is known to be rather slow - it is even mentioned in the documentation_. However, it is flexible and easy to work with, so for this reason, this was my initial approach. 
 
-The advantage of using pandas over custom-made tools is its simplicity. The initial version of the functions was quite simple and quick to develop. However, the computing time was too high and the tool would become unusable: 1h30min for 330k rows of data. By iteratively analyzing the bottlenecks and coding equivalent custom functions, the time is now reduced to 5% of what it used to be. I am sure that with some more effort it could go down to 1%.
+The advantage of using pandas over custom-made tools is its simplicity. The initial version of the functions was quite simple and it was also quick to develop. However, the computing time was too high and the tool would become unusable: 1h30min for 330k rows of data. By iteratively analyzing the bottlenecks and coding equivalent custom functions, the time is now reduced to 5% of what it used to be. I am sure that with some more effort it could go down to 1%.
+
+The tool is built as a Python package. Tests have been implemented and the coding style is PEP8 consistent, checked with *flake8*. I have based the project on this cookie-cutter_.
 
 Here there are some possible future improvements:
 
-1. Implement speed enhancements translating the groupby step in function *bundle_func()* to Numpy and Numba_.
+1. Implement speed enhancements, focusing on translating the groupby step in function *bundle_func()* to Numpy and Numba_.
 
 2. Implement a parameter to set the maximum number of notifications. Currently, 4 is hardcoded.
 
@@ -201,13 +203,15 @@ Here there are some possible future improvements:
 
 4. Add an option to read the data directly from a database, so that this tool can be run periodically without human supervision
 
-5. If data grows, parallelize the computation using Dask_, for example. If the docker image is in place we could scale this up to many threads quite easily.
+5. If data grows, we could parallelize the computation using Dask_. If the docker image is in place we could scale this up to many threads quite easily.
+
 
 Note
 ^^^^^^
 
-This tool could be used to analyze what *could* have been the optimal bundle notification schedule. It cannot be used to predict *when* is the best time to send a notification. It could be used as a basis for further analysis: once we know what was optimal in the past, we can create rules for future decisions. This functionality falls out of the scope of the assignment.
+This tool could be used to analyze what *could* have been the optimal notification schedule. As of version V.01, it cannot be used to predict *when* is the best time to send a notification. 
 
+This tool could be used as a basis for further analysis: once we know what was optimal in the past, we can create rules for future decisions. This functionality falls out of the scope of the assignment.
 
 
 .. _`Read the docs`: https://bundle-notifications.readthedocs.io
@@ -216,3 +220,4 @@ This tool could be used to analyze what *could* have been the optimal bundle not
 .. _Dask: https://dask.org/
 .. _Numba: https://pandas.pydata.org/pandas-docs/stable/user_guide/enhancingperf.html#using-numba
 .. _`speed considerations`: https://bundle-notifications.readthedocs.io/en/latest/notebooks.html
+.. _`cookie-cutter`: https://github.com/audreyr/cookiecutter-pypackage
