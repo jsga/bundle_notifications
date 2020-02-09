@@ -160,7 +160,6 @@ In short, the strategy is as follows.
 First, we group the users by *user_id* and *day*. For each of those groups, do:
 
 1. If the number of notifications for a user is lower or equal than 4, we simply decide to send all notifications.
-
 2. If the number of notifications is greater than 4:
 	1. Obtain an optimal notification schedule:
 		1. We first obtain an initial solution, simply by distributing the notifications at indexes ``x = [int(N/4), int(N/2), int(0.75*N), N-1]`` where N is the number of events for that user and day.
@@ -170,7 +169,6 @@ First, we group the users by *user_id* and *day*. For each of those groups, do:
 		1. Count how many unique friends are active in between two notifications
 		2. Discard rows that do not correspond to **x**
 3. Create a custom message
-
 4. Gather relevant columns and delete intermediate ones
 
 Finally, we consolidate all the datasets into one.
