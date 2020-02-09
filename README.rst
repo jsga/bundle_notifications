@@ -1,8 +1,8 @@
 .. highlight:: shell
 
-====================
+=====================================
 A simple tool to bundle notification
-====================
+=====================================
 
 
 .. image:: https://img.shields.io/travis/jsga/bundle_notifications.svg
@@ -22,49 +22,50 @@ A simple tool to bundle notification
 About
 ---------
 
-This package contains a tool for bundling notifications in event streams. The goal is to minimize the number of notifications sent to users.
+This package contains a tool for bundling notifications in event streams. The goal is to minimize the number of notifications sent to users and to not send more than 4 notifications per day.
 
 As an example, here it is the first couple of rows for a sample user_id::
 
 	===================  ==============================  ==============================  =============
 	timestamp            user_id                         friend_id                       friend_name
 	===================  ==============================  ==============================  =============
-	2017-08-08 11:04:36  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor
-	2017-08-10 12:29:47  0005BDD51B0185DCF1A4932CEB8437  266C5C5239255DF65ECFFDCEAF7048  Iustinian
-	2017-08-11 11:53:12  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor
-	2017-08-12 23:42:11  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara
-	2017-08-24 14:49:06  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor
-	2017-08-31 14:30:48  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara
-	2017-09-01 13:21:59  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie
-	2017-09-01 13:29:40  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie
-	2017-09-01 17:13:37  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie
-	2017-09-26 13:02:32  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara
-	===================  ==============================  ==============================  =============
+	2017-08-01 01:20:47  CFFEC5978B0A4A05FA6DCEFB2C82CC  2BB0471CAA78ED0FCEE143E175F034  Mona
+	2017-08-01 02:28:27  CFFEC5978B0A4A05FA6DCEFB2C82CC  2BB0471CAA78ED0FCEE143E175F034  Mona
+	2017-08-01 03:00:42  CFFEC5978B0A4A05FA6DCEFB2C82CC  74C09338D7CA031859AE26A1586692  Toomas
+	2017-08-01 03:51:05  CFFEC5978B0A4A05FA6DCEFB2C82CC  F039A0F7A3245F7B2D7BD0942F3680  Sean
+	2017-08-01 05:03:44  CFFEC5978B0A4A05FA6DCEFB2C82CC  DF6A386FE701217C2A12292DB8D142  Buse
+	2017-08-01 05:08:29  CFFEC5978B0A4A05FA6DCEFB2C82CC  385308FE41CA0484E84B01D5EED659  Σωτήριος
+	2017-08-01 05:59:33  CFFEC5978B0A4A05FA6DCEFB2C82CC  00A0ED2A6F99DE0E577C51FAEBF302  三浦
+	2017-08-01 06:31:08  CFFEC5978B0A4A05FA6DCEFB2C82CC  72C688FB41B4EDE06DBC790020FBE7  Victoria
+	2017-08-01 06:45:44  CFFEC5978B0A4A05FA6DCEFB2C82CC  159854120B568D6449798289D97D64  Franciso
+	2017-08-01 06:53:51  CFFEC5978B0A4A05FA6DCEFB2C82CC  B5BA8FA5CF5342CBCC9CDAA427E058  Λυκάων
+	2017-08-01 07:01:17  CFFEC5978B0A4A05FA6DCEFB2C82CC  9AB43D430EF8C4443FB8698EFD5092  Δαμιανός
+	2017-08-01 07:04:32  CFFEC5978B0A4A05FA6DCEFB2C82CC  B34CFFB5CA3C6EAA95991E35FA5066  Bakos
+	2017-08-01 07:19:44  CFFEC5978B0A4A05FA6DCEFB2C82CC  16CC2AA801B1F29D4991C947B8705A  Rozalia
+	2017-08-01 07:51:01  CFFEC5978B0A4A05FA6DCEFB2C82CC  268045C1DDB279D56F9873FCC5D2AA  Marcu
+	2017-08-01 08:38:00  CFFEC5978B0A4A05FA6DCEFB2C82CC  57AA5706AD9E5D051463DCEA8FD9BF  Blanduzia
 
 Using bundle_notifications tool, we can easily compute the following DataFrame with 3 new columns:
 
-1. **tours**: number of friends that have gone on a tour since the beginning of the stream of data
+1. **notification_sent**: timestamp of the time when the notification should have been sent
 2. **timestamp_first_tour**: timestamp for the first tour amongst his/her friends
-3. **message**: notification message
+3. **tours**: number of friends that have gone on a tour since the last notification was sent
+4. **receiver_id**: id of the receiver
+5. **message**: custom notification message
+
 
 Here it is the outcome::
 
-	===================  ==============================  ==============================  =============  =======  ======================  =====================================
-	timestamp            user_id                         friend_id                       friend_name      tours  timestamp_first_tour    message
-	===================  ==============================  ==============================  =============  =======  ======================  =====================================
-	2017-08-08 11:04:36  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor            1  2017-08-08 11:04:36     Rameshwor went on a tour
-	2017-08-10 12:29:47  0005BDD51B0185DCF1A4932CEB8437  266C5C5239255DF65ECFFDCEAF7048  Iustinian            2  2017-08-08 11:04:36     Rameshwor and 1 other went on a tour
-	2017-08-11 11:53:12  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor            2  2017-08-08 11:04:36     Rameshwor and 1 other went on a tour
-	2017-08-12 23:42:11  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara                 3  2017-08-08 11:04:36     Rameshwor and 2 others went on a tour
-	2017-08-24 14:49:06  0005BDD51B0185DCF1A4932CEB8437  0B56C34B2BB9B80100D1D5B5AB74EA  Rameshwor            3  2017-08-08 11:04:36     Rameshwor and 2 others went on a tour
-	2017-08-31 14:30:48  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara                 3  2017-08-08 11:04:36     Rameshwor and 2 others went on a tour
-	2017-09-01 13:21:59  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie                4  2017-08-08 11:04:36     Rameshwor and 3 others went on a tour
-	2017-09-01 13:29:40  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie                4  2017-08-08 11:04:36     Rameshwor and 3 others went on a tour
-	2017-09-01 17:13:37  0005BDD51B0185DCF1A4932CEB8437  DACE6D3C78D9B20B1F70A271BA98D5  Julie                4  2017-08-08 11:04:36     Rameshwor and 3 others went on a tour
-	2017-09-26 13:02:32  0005BDD51B0185DCF1A4932CEB8437  FB63F29610B1EF67AD75C4BABDFCE1  Sara                 4  2017-08-08 11:04:36     Rameshwor and 3 others went on a tour
-	===================  ==============================  ==============================  =============  =======  ======================  =====================================
+	===================  ======================  =======  ==============================  ========================================
+	notification_sent    timestamp_first_tour      tours  receiver_id                     message
+	===================  ======================  =======  ==============================  ========================================
+	2017-08-01 07:51:01  2017-08-01 01:20:47          13  CFFEC5978B0A4A05FA6DCEFB2C82CC  Mona and 12 others went on a tour
+	2017-08-01 17:44:37  2017-08-01 08:38:00           9  CFFEC5978B0A4A05FA6DCEFB2C82CC  Blanduzia and 8 others went on a tour
+	2017-08-01 20:18:46  2017-08-01 17:56:46          14  CFFEC5978B0A4A05FA6DCEFB2C82CC  史 and 13 others went on a tour
+	2017-08-01 21:59:55  2017-08-01 20:29:26          15  CFFEC5978B0A4A05FA6DCEFB2C82CC  Rozalia and 14 others went on a tour
+	2017-08-02 06:49:19  2017-08-02 02:25:24          14  CFFEC5978B0A4A05FA6DCEFB2C82CC  Buse and 13 others went on a to
 
-Note that Julie went on 3 tours in a row. The tool takes this into account this, so that Julie's friend receive a single notification that Julie went on a tour.
+Note that Mona went on 2 tours in a row. The tool takes this into account this, so that Mona's friend receive a single notification that Mona went on a tour.
 
 
 
@@ -107,7 +108,7 @@ Quickstart
 
     $ python setup.py install
 
-3. **Ready!** Bundle your first notifications! Using an example dataset_, printing only 20 rows::
+3. **Ready!** Bundle your first notifications! Using an example dataset_, printing only 10 rows::
 
     $ bundle_notifications -p "https://static-eu-komoot.s3.amazonaws.com/backend/challenge/notifications.csv" -n 10
  
@@ -116,37 +117,72 @@ Quickstart
 ::
 
 	Downloading data...
-	Bundling notifications...
-	Great! Here there are the bundled notifications
-		timestamp            user_id                         friend_id                       friend_name      tours  timestamp_first_tour    message
-	-------------------  ------------------------------  ------------------------------  -------------  -------  ----------------------  ------------------------
-	2017-08-01 00:06:47  F62712701E7AF6588B69A44235A6FC  06D188F4064E0D47BD760EEFEB7AAD  Geir                 1  2017-08-01 00:06:47     Geir went on a tour
-	2017-08-01 00:31:05  DF5BB50FAD220C8D2A8FF9A0DBAA47  588C89FCADD0DBA0E722822513A267  Antim                1  2017-08-01 00:31:05     Antim went on a tour
-	2017-08-01 00:35:24  8473CCCE79294CB494D1B42E2B1BAA  EDBB3D240ADBCF6CF175B192630ABB  Σωτήριος             1  2017-08-01 00:35:24     Σωτήριος went on a tour
-	2017-08-01 01:20:47  CFFEC5978B0A4A05FA6DCEFB2C82CC  2BB0471CAA78ED0FCEE143E175F034  Mona                 1  2017-08-01 01:20:47     Mona went on a tour
-	2017-08-01 01:21:39  0978C6F8C5093039165B5C571EACC8  45FE4C99C612BEEDE6A34B54C5369D  Laura                1  2017-08-01 01:21:39     Laura went on a tour
-	2017-08-01 01:21:58  FBA67EFA2766854B885F25C06CC2FA  92DEF3A48927B1B2B0295936679D1C  Rameshwor            1  2017-08-01 01:21:58     Rameshwor went on a tour
-	2017-08-01 01:44:16  BE6B4CBB422BBF114FB109921F2B9F  7BCD287DF0EBF5CAA86458737777BD  Noë                  1  2017-08-01 01:44:16     Noë went on a tour
-	2017-08-01 02:09:58  391A4416FC0ADE8FD604B2F1A9BCCE  96593EE816FB4CE2AEBA5B754CFA38  Λεωνίδας             1  2017-08-01 02:09:58     Λεωνίδας went on a tour
-	2017-08-01 02:20:32  D12E9E35AF8817E88F94F966B9C1F8  723515D5D083C9C15EC9A24AA624D7  Lina                 1  2017-08-01 02:20:32     Lina went on a tour
-	2017-08-01 02:20:32  DDBA7653545B1BB68658838A22BAA5  723515D5D083C9C15EC9A24AA624D7  Lina                 1  2017-08-01 02:20:32     Lina went on a tour
+	Bundling notifications... (Estimated time: 368.35 seconds for 337657 rows)
+	Saving to csv: bundle_notifications.csv
+	Great! Here there are the first 10 bundled notifications
+	notification_sent    timestamp_first_tour      tours  receiver_id                     message
+	-------------------  ----------------------  -------  ------------------------------  ------------------------
+	2017-09-05 12:54:49  2017-09-05 12:54:49           1  00013DA3ABDE2F0771AB56A53A9AA3  Amelia went on a tour
+	2017-09-05 13:28:31  2017-09-05 13:28:31           1  00013DA3ABDE2F0771AB56A53A9AA3  Amelia went on a tour
+	2017-09-24 11:20:48  2017-09-24 11:20:48           1  000367CD43072A5C649AD27FAC6479  Magdaléna went on a tour
+	2017-08-01 12:34:51  2017-08-01 12:09:25           1  0005BDD51B0185DCF1A4932CEB8437  Sara went on a tour
+	2017-08-01 13:01:50  2017-08-01 12:55:33           1  0005BDD51B0185DCF1A4932CEB8437  Sara went on a tour
+	2017-08-01 14:26:25  2017-08-01 13:45:58           1  0005BDD51B0185DCF1A4932CEB8437  Sara went on a tour
+	2017-08-01 15:31:46  2017-08-01 14:58:13           1  0005BDD51B0185DCF1A4932CEB8437  Sara went on a tour
+	2017-08-02 09:25:01  2017-08-02 09:25:01           1  0005BDD51B0185DCF1A4932CEB8437  Bonifác went on a tour
+	2017-08-03 11:00:03  2017-08-03 11:00:03           1  0005BDD51B0185DCF1A4932CEB8437  Bonifác went on a tour
+	2017-08-04 13:26:34  2017-08-04 13:26:34           1  0005BDD51B0185DCF1A4932CEB8437  Rameshwor went on a tour
+
+
+
+Optimization problem & local search solution
+--------------------------------------------
+
+
+There are two goals:
+
+1. To not send more than 4 notifications a day to a user (should happen only a few times)
+2. To keep sending delay minimal
+
+They can be translated to an optimization problem, where the decision variable is:
+
+x
+	[x1, x2, x3, x4] Indexes, each one corresponding to a timestamps when the notification should have been sent.
+
+Let's say there are 10 evens with theit timestamps **t** = [t0, t2, .., t10] and that we decide to send notification at **x** = [0, 2, 7, 10]. The total delay **D** is then calculated as::
+
+	D = (t2-t1) + (t7-t6) + (t7-t4) + (t7-t3) + (t7-t6) + (t10-t8) + (t10-t9)
+
+Even though the intuition behind this problem is quite simple, this optimization problem is unfortunately not linear and not straight-forward to formulate. For this reason, in this tool we use a heuristic optimization approach (local search), which, in practice, seems to work well. See :ref:`optimal delay <optimal_delay>` section for further information.
+
+
 
 
 Features: current and future
 --------------------------------
 
-The tool is mainly based on pandas. It relies on two main functionalities: reading csv files and group-apply function. With a 30 MB dataset it takes around 1 minute to compute the groupping and applying a function to each user_id. 
+The tool relies on two main pandas functionalities: reading csv files and group-apply function. Applying a custom function to a pandas groupby is known to be rather slow - it is even mentioned in the documentation_. However, it is flexible and easy to work with so for this reason, this was my initial approach. 
 
-The advantage of using pandas over custom-made tools is its simplicity. Also, vectorizing the calculations makes them quite fast.
+The advantage of using pandas over custom-made tools is its simplicity. The initial version of the functions were quite simple. However, the computing time was too high and the tool would unusable: 1h30min for 330k rows of data. By iteratively analyzing the bottlenecks and coding equivalent custom functions, the time is now reduced to 5% of what it used to be. I am sure that with some more effort it could go down at least to 1%.
 
 Here there are some possible future improvements:
 
-1. Implement speed enhacements translating the apply function *bundle_func()* to Numba_. This could speed up by asignificantly the computations.
+1. Implement speed enhacements translating the groupby step in function *bundle_func()* to Numpy and Numba_.
+
+2. Implement the option to set the maximum number of notifications. Currently, 4 is hardcoded.
+
 2. Encapsulating this tool in a Docker image would make it much easier to move from development to a productions server.
+
 3. Option to read the data directly from a database, so that this tool can be run periodically without human supervision
+
 4. If data grows, parallelize the computation using Dask_, for example. If the docker image is in place we could scale this up to many threads quite easily.
+
+This tool could be used to analyze what *could* have been the optimal bundle notification schedule. It cannot be used to predict *when* is the best time to send a notification. It could be used as a basis for further analysis: once we know what was optimal in the past, we can create rules for future decisions.
+
+
 
 .. _`Read the docs`: https://bundle-notifications.readthedocs.io
 .. _dataset: https://static-eu-komoot.s3.amazonaws.com/backend/challenge/notifications.csv
+.. _documentation: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.core.groupby.GroupBy.apply.html#pandas.core.groupby.GroupBy.apply
 .. _Dask: https://dask.org/
 .. _Numba: https://pandas.pydata.org/pandas-docs/stable/user_guide/enhancingperf.html#using-numba

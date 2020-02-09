@@ -7,8 +7,8 @@ from click.testing import CliRunner
 import pandas as pd
 import numpy as np
 from bundle_notifications import cli
-from bundle_notifications import bundle_notifications #import load_data, bundle_func,add_message
-
+from bundle_notifications import bundle_notifications
+from bundle_notifications import optimal_delay
 
 def test_command_line_interface():
     """Test the CLI."""
@@ -17,7 +17,7 @@ def test_command_line_interface():
     # Test with no parameters
     result = runner.invoke(cli.main)
     assert result.exit_code == 0
-    assert 'Great! Here there are the bundled notifications' in result.output
+    assert 'Great!' in result.output
 
     # Test with --help
     help_result = runner.invoke(cli.main, ['--help'])
@@ -36,6 +36,27 @@ def test_load_data():
     assert isinstance(df,pd.core.frame.DataFrame), "Loaded data is not a pandas DataFrame"
     assert df.shape == (1,4), "Data is not loaded correctly."
 
+
+def test_create_message_single():
+    """Test single message creation"""
+
+
+    assert bundle_notifications.create_message_single(1,'Javi') == 'Javi went on a tour'
+    assert bundle_notifications.create_message_single(2,'Javi') == 'Javi and 1 other went on a tour'
+    assert bundle_notifications.create_message_single(3,'Javi') == 'Javi and 2 others went on a tour'
+    with pytest.raises(ValueError):
+        bundle_notifications.create_message_single(-1,'error')
+
+
+def test_create_message():
+    """Test for the message of the notification"""
+
+    tours = np.array([1,2,3,10])
+    names = np.array(['Javi','Javier', 'Saez','Gallego'])
+    message = bundle_notifications.create_message(tours, names)
+
+    assert len(message) == 4
+    assert isinstance(message,np.ndarray)
 
 
 def test_bundle_func():
@@ -60,23 +81,18 @@ def test_bundle_func():
  'friend_name': {0: 'Geir', 1: 'Antim', 2: 'Σωτήριος', 3: 'Mona', 4: 'Laura'}}
 
     # Run bundle function
-    df_test = bundle_notifications.bundle_func( pd.DataFrame(d_fake))
+    df_test = bundle_notifications.bundle( pd.DataFrame(d_fake))
     
-    assert isinstance(df_test,pd.core.frame.DataFrame), "Loaded data is not a pandas DataFrame"
-    assert df_test.shape == (5,7), "Output dimensions mismatch."
-    assert np.all(df_test.columns == ['timestamp', 'user_id', 'friend_id', 'friend_name', 'tours',
-       'timestamp_first_tour', 'message']), "Wrong output names"
+    assert isinstance(df_test,pd.core.frame.DataFrame), "Output element is not a pandas DataFrame"
+    assert df_test.shape == (5,5), 'Output dimensions mismatch.'
+    assert np.all(df_test.columns == ['notification_sent', 'timestamp_first_tour', 'tours', 'receiver_id', 'message']), "Wrong output column names"
 
 
+def test_total_delay():
+    """Test for the total delay of notifications"""
 
-
-def test_add_message():
-    """Test for the message of the notification"""
-
-    x = pd.DataFrame({'message':['Javi','Javier', 'Saez','Gallego'], 'tours':[1,2,3,-1]})
-
-    assert bundle_notifications.add_message(x.iloc[0,]) == 'Javi went on a tour'
-    assert bundle_notifications.add_message(x.iloc[1,]) == 'Javier and 1 other went on a tour'
-    assert bundle_notifications.add_message(x.iloc[2,]) == 'Saez and 2 others went on a tour'
-    with pytest.raises(ValueError):
-        bundle_notifications.add_message(x.iloc[3,])
+    t = np.array([0,1,2,3,4,10]) # timestamps
+    x = np.array([0,1,2,5]) # notification indexes
+    tot = optimal_delay.delay(t, x)
+    # (10-3) + (10-4) = 13
+    assert tot == 13, 'Unexpected delay calculation'

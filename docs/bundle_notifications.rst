@@ -20,6 +20,14 @@ bundle\_notifications.cli module
     :undoc-members:
     :show-inheritance:
 
+bundle\_notifications.optimal\_delay module
+-------------------------------------------
+
+.. automodule:: bundle_notifications.optimal_delay
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

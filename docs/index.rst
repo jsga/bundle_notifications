@@ -6,8 +6,8 @@ Welcome to bundle_notifications's documentation!
    :caption: Contents:
 
    readme
+   notebooks
    modules
-   contributing
    history
 
 .. include:: ../README.rst
