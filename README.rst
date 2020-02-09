@@ -171,7 +171,7 @@ First, we group the users by *user_id* and *day*. For each of those groups, do:
 3. Create a custom message
 4. Gather relevant columns and delete intermediate ones
 
-Finally, we consolidate all the datasets into one.
+Finally, we consolidate all the datasets (one per group) into one.
 
 
 Features: Current and future
