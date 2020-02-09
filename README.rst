@@ -89,22 +89,22 @@ Quickstart
 
     $ git clone https://github.com/jsga/bundle_notifications.git
 
- Alternatively, you can manually download the repository as a zip file.
+Alternatively, you can manually download the repository as a zip file.
 
- Make sure the terminal is at the root of the package::
+Make sure the terminal is at the root of the package::
 
     $ cd bundle_notifications
     $ pwd
     >/Users/myuser/Documents/GitHub/bundle_notifications
 
- You should see something like the above
+You should see something like the above
 
- In case you want to install this package in a virtual enviroment, create one and activate it::
+In case you want to install this package in a virtual enviroment, create one and activate it::
 
     $ python -m venv .venv_bundle_notifications
     $ source .venv_bundle_notifications/bin/activate 
 
- Install the package::
+Install the package::
 
     $ python setup.py install
 
@@ -152,7 +152,8 @@ Let's formulate an example. Say there are 10 events with timestamps **t** = [t0,
 
     D = (t2-t1) + (t7-t6) + (t7-t4) + (t7-t3) + (t7-t6) + (t10-t8) + (t10-t9)
 
-Even though the intuition behind this problem is quite simple, this optimization problem is unfortunately not linear and not straight-forward to formulate. For this reason, in this tool, we use a heuristic optimization approach (local search), which, in practice, seems to work well. See :ref:`optimal delay <optimal_delay>` section for further information.
+Even though the intuition behind this problem is quite simple, this optimization problem is unfortunately not linear and not straight-forward to formulate. For this reason, in this tool, we use a heuristic optimization approach (local search), which, in practice, seems to work well. See `speed considerations`_ section for further information.
+
 
 Implementation
 ^^^^^^^^^^^^^^
@@ -214,3 +215,4 @@ This tool could be used to analyze what *could* have been the optimal bundle not
 .. _documentation: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.core.groupby.GroupBy.apply.html#pandas.core.groupby.GroupBy.apply
 .. _Dask: https://dask.org/
 .. _Numba: https://pandas.pydata.org/pandas-docs/stable/user_guide/enhancingperf.html#using-numba
+.. _`speed considerations`: https://bundle-notifications.readthedocs.io/en/latest/notebooks.html
