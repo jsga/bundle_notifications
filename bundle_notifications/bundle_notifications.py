@@ -155,7 +155,7 @@ def count_tours_per_notif(notification_counter, friend_id, friend_name,
     In pseudo-code, this is equivalent to:
 
     - As an input, we have a dataset filtered by user_id and day of the year
-    - Each of the inputs of this functions are numpy arrays, corrsponding to a
+    - Each of the inputs of this function are numpy arrays, corresponding to a
       column of the dataset. Doing basic in numpy is much faster, especially if
       we manage to use a @jit compilator (TODO)
     - Let us call the solution _tours_. For each element in friend_id we do:
@@ -172,9 +172,9 @@ def count_tours_per_notif(notification_counter, friend_id, friend_name,
         notification counter. Could be the output of an optimal_delay method.
         For example, ``np.array([1,2,3,10])`` for a 10 element array
     friend_id : np.array of str
-        array containing name of the friends
+        array containing names of the friends
     friend_name : np.array of str
-        array containing name of the friends
+        array containing names of the friends
     timestamp: np.array of datetime64[ns]
         timestamps when the notifications are generated
 
@@ -184,7 +184,7 @@ def count_tours_per_notif(notification_counter, friend_id, friend_name,
         Count of the number of tours done since the last notification was sent,
         for unique friends-id
     name_first : np.array of <U256
-        Name of the friend who first did a tour since the last notification was
+        Names of the friend who first did a tour since the last notification was
         sent.
         len(name_first) <=4
     timestamp_first_tour : np.array of datetime64[ns]
