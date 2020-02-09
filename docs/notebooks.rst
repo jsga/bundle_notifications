@@ -1,19 +1,21 @@
+.. _optimal_delay:
+
 Speed considertions
 ====================
 
-Below there are two notebooks I used for comparing speeds of several functions. Generally speaking:
 
-1. Numpy-based functions run significantly faster than pandas-based functions
-2. Numba-compiled functions run significantly faster than Numpy-based functions
+Below there are two notebooks I used for comparing speeds of several functions that I have developed iteratively. Generally speaking, the conclusions are:
+
+1. Pandas-based functions are quick to develop and easy to understand
+2. Numpy-based functions run significantly faster than pandas-based functions
+3. Numba-compiled functions run significantly faster than Numpy-based functions
 
 
-.. _optimal_delay:
 Optimal delay
 ----------------
 
 .. raw:: html
    :file: ../notebooks/01-jsg-Optimal_delay_speed.html
-
 
 
 Bundle functions

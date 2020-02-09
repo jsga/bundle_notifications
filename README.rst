@@ -144,12 +144,11 @@ There are two goals:
 1. To not send more than 4 notifications a day to a user (should happen only a few times)
 2. To keep sending delay minimal
 
-They can be translated to an optimization problem, where the decision variable is:
+These goals can be translated to an optimization problem, where the decision variable is
 
-x
-	[x1, x2, x3, x4] Indexes, each one corresponding to a timestamps when the notification should have been sent.
+**x** =  [x1, x2, x3, x4] representing indexes, each one corresponding to a timestamps when the notification should have been sent. The function to minimize is therefore the total delay incurred by sentind the notifications at **x**.
 
-Let's say there are 10 evens with theit timestamps **t** = [t0, t2, .., t10] and that we decide to send notification at **x** = [0, 2, 7, 10]. The total delay **D** is then calculated as::
+Let's formulate an example. Say there are 10 events with timestamps **t** = [t0, t2, .., t10] and that we decide to send notification at **x** = [0, 2, 7, 10]. The total delay **D** is then calculated as::
 
 	D = (t2-t1) + (t7-t6) + (t7-t4) + (t7-t3) + (t7-t6) + (t10-t8) + (t10-t9)
 
@@ -161,23 +160,26 @@ Even though the intuition behind this problem is quite simple, this optimization
 Features: current and future
 --------------------------------
 
-The tool relies on two main pandas functionalities: reading csv files and group-apply function. Applying a custom function to a pandas groupby is known to be rather slow - it is even mentioned in the documentation_. However, it is flexible and easy to work with so for this reason, this was my initial approach. 
+The tool relies on two main pandas functionalities: reading csv files and group-apply functions. Applying a custom function to a pandas groupby element is known to be rather slow - it is even mentioned in the documentation_. However, it is flexible and easy to work with, so for this reason, this was my initial approach. 
 
-The advantage of using pandas over custom-made tools is its simplicity. The initial version of the functions were quite simple. However, the computing time was too high and the tool would unusable: 1h30min for 330k rows of data. By iteratively analyzing the bottlenecks and coding equivalent custom functions, the time is now reduced to 5% of what it used to be. I am sure that with some more effort it could go down at least to 1%.
+The advantage of using pandas over custom-made tools is its simplicity. The initial version of the functions were quite simple and quick to develop. However, the computing time was too high and the tool would become unusable: 1h30min for 330k rows of data. By iteratively analyzing the bottlenecks and coding equivalent custom functions, the time is now reduced to 5% of what it used to be. I am sure that with some more effort it could go down to 1%.
 
 Here there are some possible future improvements:
 
 1. Implement speed enhacements translating the groupby step in function *bundle_func()* to Numpy and Numba_.
 
-2. Implement the option to set the maximum number of notifications. Currently, 4 is hardcoded.
+2. Implement a parameter to set the maximum number of notifications. Currently, 4 is hardcoded.
 
-2. Encapsulating this tool in a Docker image would make it much easier to move from development to a productions server.
+3. Encapsulating this tool in a Docker image would make it much easier to move from development to a productions server.
 
-3. Option to read the data directly from a database, so that this tool can be run periodically without human supervision
+4. Add an option to read the data directly from a database, so that this tool can be run periodically without human supervision
 
-4. If data grows, parallelize the computation using Dask_, for example. If the docker image is in place we could scale this up to many threads quite easily.
+5. If data grows, parallelize the computation using Dask_, for example. If the docker image is in place we could scale this up to many threads quite easily.
 
-This tool could be used to analyze what *could* have been the optimal bundle notification schedule. It cannot be used to predict *when* is the best time to send a notification. It could be used as a basis for further analysis: once we know what was optimal in the past, we can create rules for future decisions.
+Note
+^^^^^^
+
+This tool could be used to analyze what *could* have been the optimal bundle notification schedule. It cannot be used to predict *when* is the best time to send a notification. It could be used as a basis for further analysis: once we know what was optimal in the past, we can create rules for future decisions. This funcionality fall out of the scope of the assignment.
 
 
 
