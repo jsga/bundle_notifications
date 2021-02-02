@@ -8,7 +8,7 @@ attrs==19.3.0
 autopep8==1.5
 Babel==2.8.0
 backcall==0.1.0
-bleach==3.1.0
+bleach==3.3.0
 bump2version==0.5.11
 -e git+https://github.com/jsga/bundle_notifications.git@fefdc66e61e54cbd92900cf638d2f2b3f1c51655#egg=bundle_notifications
 certifi==2019.11.28
