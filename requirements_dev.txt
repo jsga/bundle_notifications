@@ -11,7 +11,7 @@ backcall==0.1.0
 bleach==3.1.0
 bump2version==0.5.11
 -e git+https://github.com/jsga/bundle_notifications.git@fefdc66e61e54cbd92900cf638d2f2b3f1c51655#egg=bundle_notifications
-certifi==2019.11.28
+certifi==2022.12.7
 chardet==3.0.4
 Click==7.0
 codecov==2.0.15
